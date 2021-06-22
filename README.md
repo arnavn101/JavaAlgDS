@@ -43,6 +43,39 @@ Various algorithms to sort arrays
 3) O(N^2) - but faster than Bubble and Selection Sorts due to copying instead of swaps
 ```
 
+## Stack 
+
+DataStructure that only allows access to the last element inserted.
+
+```
+1) Only Access the topmost element (LIFO storage - Last in first out)
+2) Placing item -> pushing, Removing item -> popping
+3) O(1) - Easy to push and pop elements from stack
+```
+
+## Queue 
+
+DataStructure that allows the first element inserted to be removed.
+
+```
+1) Access the first element inserted (FIFO storage - First in first out)
+2) Allows inserting element at rear and removing element at front
+3) A DeQueue is a double ended queue (items can be inserted or deleted at both ends)
+4) In a priority queue, items with higher priority are pushed to the front of the queue 
+```
+
+## Linked List 
+
+List in which each element points to the next, in addition to storing data.
+
+```
+1) To find a particular element, the entire chain of elements must be analyzed
+2) In a double-ended list, the first link has a reference to the last link
+    - This allows for inserting elements at end of list more efficiently
+3) A Doubly Linked List has elements with two references - one to next link and other to previous link
+    - Allows for backward traversal as well as forward
+```
+
 ## License
 
-MIT License Copyright (c) 2020, Arnav Nidumolu
+MIT License Copyright (c) 2021, Arnav Nidumolu
