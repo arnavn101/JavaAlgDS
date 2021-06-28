@@ -6,17 +6,32 @@ package DataStructures;
 
 public class DStester {
     public static void main(String args[]){
-        DoublyLinkedList sampleL = new DoublyLinkedList();
-        sampleL.insertFirst(5, 2.55);
-        sampleL.insertFirst(17, 1.33);
-        sampleL.insertLast(1, 100.1);
-        sampleL.insertLast(50, 1.11);
-        sampleL.insertFirst(3, 1.11);
+        BinaryTree sampleT = new BinaryTree();
 
-        sampleL.displayForward();
+        sampleT.insert(50, 1.99);
+        sampleT.insert(25, 0.87);
+        sampleT.insert(11, 3.14);
 
-        sampleL.deleteFirst();
-        sampleL.deleteLast();
-        sampleL.displayBackward();
+        BinaryNode foundN = sampleT.find(50);
+        if(foundN != null){
+            System.out.println("Found this node");
+        }
+        else{
+            System.out.println("Did not find this node");
+        }
+
+        sampleT.traverseInOrder(sampleT.find(50));
+        System.out.println();
+
+        boolean delN = sampleT.delete(25);
+        if(delN){
+            System.out.println("Deleted this node");
+        }
+        else{
+            System.out.println("Did not find this node");
+        }
+
+        sampleT.traverseInOrder(sampleT.getRootNode());
+        System.out.println();
     }
 }
