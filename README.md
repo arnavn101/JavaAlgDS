@@ -115,7 +115,7 @@ List in which each element points to the next, in addition to storing data.
 1) To find a particular element, the entire chain of elements must be analyzed
 2) In a double-ended list, the first link has a reference to the last link
     - This allows for inserting elements at end of list more efficiently
-3) A Doubly Linked List has elements with two references - one to next link and other to previous link
+3) Doubly Linked List: Elements with 2 references - to next link and to previous link
     - Allows for backward traversal as well as forward
 ```
 
@@ -141,6 +141,27 @@ DataStructure that allows for quick searching and insertion of elements.
     ii) Preorder (Root, Left, Right) 
     iii) Postorder (Left, Right, Root)
 7) O(logN) time for all operations
+```
+
+## Red Black Tree 
+
+DataStructure that avoids unbalanced trees and ensures a reasonably symmetrical arrangements of nodes.
+
+```
+1) During insertion and deletion, rules are followed to ensure a balanced tree
+2) Rules to be followed
+    i) Every node is either black or red colored
+    ii) The root is always black
+    iii) If a node is red, its children must be black
+    iv) Every path from root to a leaf (or null child) should contain same no. of black nodes
+            - Number of black nodes on a path from root to leaf is called "black height"
+3) Color flip when, in the insertion process, a black node with two red children is encountered
+4) Rotations
+    i) RoL - The node's right child takes it place and the node moves into position of left child
+    ii)RoR - The node's left child takes it place and the node moves into position of right child
+    iii) Inside grandchild always disconnects from parent and reconnects to former grandparent
+5) Slightly Slower Insertion than ordinary binary tree (but still O(logN))
+    - Optimized for sorted data insertion
 ```
 
 ## License

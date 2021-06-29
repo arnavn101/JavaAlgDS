@@ -9,6 +9,7 @@ public class BinaryNode {
     double fData;
     BinaryNode leftChild;
     BinaryNode rightChild;
+    Boolean isRedNode; // Useful in RedBlack Tree Implementations
 
     public BinaryNode(int iD, double dD){
         iData = iD;

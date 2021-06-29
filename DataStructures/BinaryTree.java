@@ -45,10 +45,8 @@ public class BinaryTree {
 
                         // No more children nodes so add this one
                         if(currentN == null){
-                            if(iD < prevN.iData){
-                                prevN.leftChild = toIns;
-                                return;
-                            }
+                            prevN.leftChild = toIns;
+                            return;
                         }    
                     }
                     else{
@@ -56,10 +54,8 @@ public class BinaryTree {
 
                         // No more children nodes so add this one
                         if(currentN == null){
-                            if(iD < prevN.iData){
-                                prevN.rightChild = toIns;
-                                return;
-                            }
+                            prevN.rightChild = toIns;
+                            return;
                         }    
                         
                     }
