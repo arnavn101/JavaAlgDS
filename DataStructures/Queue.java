@@ -5,7 +5,7 @@ package DataStructures;
 */
 
 public class Queue {
-    private long[] queueArray;
+    private int[] queueArray;
     private int frontIndex;
     private int backIndex;
     private int maxSize;
@@ -13,13 +13,13 @@ public class Queue {
 
     public Queue(int maxElements) {
         maxSize = maxElements;
-        queueArray = new long[maxSize];
+        queueArray = new int[maxSize];
         frontIndex = 0;
         backIndex = -1; // Behind the front index initially
         nElements = 0;
     }
 
-    public void insertElement(long toInsert){
+    public void insertElement(int toInsert){
         // Allow for "circling" queue
         if (backIndex == (maxSize-1))
             backIndex = -1;
@@ -29,8 +29,8 @@ public class Queue {
         nElements++;
     }
 
-    public long removeElement(){
-        long toReturn = queueArray[frontIndex];
+    public int removeElement(){
+        int toReturn = queueArray[frontIndex];
         frontIndex++;
 
         if(frontIndex == maxSize)
@@ -40,7 +40,7 @@ public class Queue {
         return toReturn;
     }
 
-    public long peekFront(){
+    public int peekFront(){
         return queueArray[frontIndex];
     }
 

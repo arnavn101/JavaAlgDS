@@ -5,28 +5,28 @@ package DataStructures;
 */
 
 public class Stack {
-    private long[] stackArray;
+    private int[] stackArray;
     private int topIndex;
     private int maxSize;
 
     public Stack(int maxElements) {
         maxSize = maxElements;
-        stackArray = new long[maxSize];
+        stackArray = new int[maxSize];
         topIndex = -1; // No data is pushed to the stack yet
     }
 
-    public void push(long dataInput){
+    public void push(int dataInput){
         topIndex++;
         stackArray[topIndex] = dataInput;
     }
 
-    public long pop(){
-        long toReturn = stackArray[topIndex];
+    public int pop(){
+        int toReturn = stackArray[topIndex];
         topIndex--;
         return toReturn;
     }
 
-    public long peek(){
+    public int peek(){
         return stackArray[topIndex];
     }
 

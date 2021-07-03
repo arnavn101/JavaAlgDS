@@ -164,6 +164,102 @@ DataStructure that avoids unbalanced trees and ensures a reasonably symmetrical 
     - Optimized for sorted data insertion
 ```
 
+## 2-3-4 tree 
+
+DataStructure that allows for larger number of children nodes and data items.
+
+```
+1) 3 Possible arrangements for nodes --> 2, 3, or 4 children with 1 less data items
+    - Child Links = Data Items + 1
+2) Nodes with single links are not permitted
+    - Ex: A node with 1 data item should have 2 links or no links if it is a leaf
+3) Tree Structure Rules
+    i) All children in subtree rooted at child 0 have key values < than key 0
+    ii) All children in subtree rooted at child 1 have key values > than key 0 and < key 1
+    iii) All children in subtree rooted at child 2 have key values > key 1 and < key 2
+    iv) All children in subtree rooted at child 3 have key values > key 2
+4) Data items are ordered in an ascending manner within nodes
+5) Data items can only be inserted in leaves to avoid chainging links in other nodes
+    - If no full nodes are encountered, the item can simply be inserted into a leaf
+    - If a full node is found in the path, it should be split into 2 before inserting the item
+    - If the root is full, it is divided into 3 parts before inserting the item
+6) O(logN) search time
+```
+
+## Hash Table 
+
+DataStructure that offers fast insertion and searching.
+
+```
+1) A range of key values is transformed into a range of array index values
+    - A hash function converts numbers in large range to numbers in small range (using %)
+2) Turns a key into an array index and returns the content of the array at that index
+3) Data is inserted using a hash function into an array, known as hash table
+4) Open Addressing - data that cant be placed at index specified by HF is placed elsewhere
+    i) Linear Probing: search sequentially for vacant cells
+    ii) Quadratic probing: probe widely seperated cells (increase step size with each step)
+        - Ensure that array size is a prime number to prevent endless sequence of steps
+    iii) Double hashing: hash the key with another hash function, and use result as the step size
+        - Ex: stepSize = constant - (key % constant), where constant is prime
+        - Size of hash table should be a prime number (forces the probe to check every cell)
+5) Separate Chaining - install a linked list at each index to account for more data with same hash
+6) Around O(1) time for searching and insertion depending on size of clusters
+```
+
+## Heap 
+
+A Datastructure similar to a binary tree.
+
+```
+1) A heap is a binary tree with the following characteristics
+    i) Complete - every parent node, apart from those in last node, have 2 children
+    ii) Implemented as an array
+    iii) Each node satisfied the heap condition - every node's key is > keys of children 
+2) In every path from the root to a leaf, the nodes are arranged in descending order
+3) Removal and Insertion is based on swapping elements until it is in the right place
+4) O(logN) time for insertions and deletions
+5) HeapSorts can be implemented using insert and removal operations of heaps
+    - O(N*logN) time regardless of distribution of data
+```
+
+## Graphs 
+
+A Datastructure that is used to represent complex relationships between objects.
+
+```
+1) It consists of vertices (nodes) connected by edges
+    - Two vertices are considered adjacent if connected by a single edge
+    - A path refers to sequence of edges
+2) Connected Graph: there is at least one path from every vertex to another
+3) Directed graphs: edges have a direction associated with them
+4) Ways to model graphs
+    i) Adjacency Matrix - 2D array specifying whether a edge exists between 2 vertices
+    ii) Adjancency List - each index contains a list of vertices adjacent to the given vertex
+```
+
+# Depth-First Search
+
+Uses a stack to traverse through a graph, remembering previous vertices in a path
+
+```
+1) It first visits the given vertex, pushes it onto a stack and then travels to an adjacent vertex
+    - The process is repeated for all adjacent vertices until it finds a "dead-end" (no adj vertices)
+2) Then, it pops the recent vertex from the stack and visits the previous vertex
+    - It traverses through other adjacent vertices that were not visited before and pops at deadend
+3) The algorithm ends when stack becomes empty
+```
+
+# Breadth-First Search
+
+Uses a queue to traverse a graph instead of a stack
+
+```
+1) Visits all unvisited adjacent vertices from starting vertex, inserting them into a queue
+2) If no more unvisited vertices, remove a vertex from queue, making it current vertex
+3) Execute the same process for all other vertices 
+```
+
+
 ## License
 
 MIT License Copyright (c) 2021, Arnav Nidumolu

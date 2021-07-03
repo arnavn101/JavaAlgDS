@@ -6,32 +6,24 @@ package DataStructures;
 
 public class DStester {
     public static void main(String args[]){
-        BinaryTree sampleT = new BinaryTree();
+        Graph thisG = new Graph();
+        thisG.insertVertex('A');
+        thisG.insertVertex('B');
+        thisG.insertVertex('C');
+        thisG.insertVertex('D');
+        thisG.insertVertex('E');
 
-        sampleT.insert(50, 1.99);
-        sampleT.insert(25, 0.87);
-        sampleT.insert(11, 3.14);
+        thisG.addEdge(0, 1);
+        thisG.addEdge(1, 2);
+        thisG.addEdge(0, 3);
+        thisG.addEdge(3, 4);
 
-        BinaryNode foundN = sampleT.find(50);
-        if(foundN != null){
-            System.out.println("Found this node");
-        }
-        else{
-            System.out.println("Did not find this node");
-        }
-
-        sampleT.traverseInOrder(sampleT.find(50));
+        System.out.print("DFS Visits: ");
+        thisG.depthFirstSearch(0);
         System.out.println();
 
-        boolean delN = sampleT.delete(25);
-        if(delN){
-            System.out.println("Deleted this node");
-        }
-        else{
-            System.out.println("Did not find this node");
-        }
-
-        sampleT.traverseInOrder(sampleT.getRootNode());
+        System.out.print("BFS Visits: ");
+        thisG.breadthFirstSearch(0);
         System.out.println();
     }
 }
