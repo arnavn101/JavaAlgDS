@@ -237,7 +237,7 @@ A Datastructure that is used to represent complex relationships between objects.
     ii) Adjancency List - each index contains a list of vertices adjacent to the given vertex
 ```
 
-# Depth-First Search
+#### Depth-First Search
 
 Uses a stack to traverse through a graph, remembering previous vertices in a path
 
@@ -249,7 +249,7 @@ Uses a stack to traverse through a graph, remembering previous vertices in a pat
 3) The algorithm ends when stack becomes empty
 ```
 
-# Breadth-First Search
+#### Breadth-First Search
 
 Uses a queue to traverse a graph instead of a stack
 
@@ -259,6 +259,39 @@ Uses a queue to traverse a graph instead of a stack
 3) Execute the same process for all other vertices 
 ```
 
+#### Minimum spanning tree
+
+Ensures a minimum number of edges that connect vertices in a graph
+
+```
+1) Number of edges E in a minimum spanning tree is one less than the number of vertices V
+    i) E = V - 1
+2) Records the edges traveled in a depth first search 
+    i) The path of DFS algorithm through a graph is a minimum spanning tree
+```
+
+#### Topological sorting
+
+Allows for a linear ordering of graph vertices depending on the direction of the edges
+
+```
+1) It first involves finding vertex that has no successors (no downstream vertices)
+    i) The vertex is then deleted from graph, with its label inserted at beginning of a list
+2) The steps above are repeated until all vertices are gone 
+    i) The final list would show the vertices arranged in topological order
+3) Unable to handle cyclic graphs (graph with a path that ends up where it started)
+    - only works on directed acyclic graphs
+```
+
+#### Warshall's Algorithm (Transitive Closure)
+
+Used for determining if a vertex is reachable from another vertex (Transitive Closure)
+
+```
+1) Constructs a connectivity table that works on the basis of:
+    - If a path exists from vertex L to M and from M to N, there is a path from L to N
+2) Iterates through each row and column, noting down possible paths
+```
 
 ## License
 
