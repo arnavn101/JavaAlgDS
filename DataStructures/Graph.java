@@ -1,5 +1,7 @@
 package DataStructures;
 
+import java.util.NoSuchElementException;
+
 /*
     Simple Graph
 */
@@ -11,7 +13,10 @@ public class Graph {
     private int nVertices;
     private Stack thisStack; // for DFS
     private Queue thisQueue; // for BFS
+    private PriorityQueueV thisPriorityQ; // for min spanning tree
+    private int numberTree; // Number of vertices in tree
     private char topoSortedArray[]; // for topological sorting
+    private int currentVertex;
 
     public Graph(){
         listVertices = new Vertex[MAX_VERTS];
@@ -20,15 +25,16 @@ public class Graph {
         thisStack = new Stack(MAX_VERTS);
         thisQueue = new Queue(MAX_VERTS);
         topoSortedArray = new char[MAX_VERTS];
+        thisPriorityQ = new PriorityQueueV(MAX_VERTS);
     }
 
     public void insertVertex(char vLabel){
         listVertices[nVertices++] = new Vertex(vLabel);
     }
 
-    public void addEdge(int startE, int endE){
-        adjMatrix[startE][endE] = 1;
-        adjMatrix[endE][startE] = 1;
+    public void addEdge(int startE, int endE, int weightE){
+        adjMatrix[startE][endE] = weightE;
+        adjMatrix[endE][startE] = weightE;
     }
 
     public void addEdgeDirected(int startE, int endE){
@@ -53,11 +59,11 @@ public class Graph {
             for(int col=0; col<nVertices; col++){
 
                 // Examine cells in 'row' (there is path from col to row)
-                if(copyAdjMatrix[row][col] == 1){
+                if(copyAdjMatrix[row][col] != 0){
 
                     // Examine cells in 'col' (there is path from rT to col)
                     for(int rT=0; rT<nVertices; rT++){
-                        if(copyAdjMatrix[col][rT] == 1){
+                        if(copyAdjMatrix[col][rT] != 0){
                             copyAdjMatrix[row][rT] = 1; // there must be a path from rT to row
                         }
                     }
@@ -162,6 +168,71 @@ public class Graph {
         resetVisitedFlags();
     }
 
+    // Minimum Spanning Tree Algorithm for Weighted Graphs (DFS)
+    public void minimumSpanningTreeW(int sNode){
+        currentVertex = sNode;
+
+        while(numberTree < nVertices - 1){
+            listVertices[currentVertex].isInTree = true;
+            numberTree++;
+
+            // Insert Edges Adjacent to currentVertex into PriorityQ
+            for(int i=0; i < nVertices; i++){
+                if(i == currentVertex){
+                    continue;
+                }
+                if(listVertices[i].isInTree){
+                    continue;
+                }
+                int thisDistance = adjMatrix[currentVertex][i];
+                if(thisDistance == 0){
+                    continue;
+                }
+                insertIntoPriorityQ(i, thisDistance);
+            }
+
+            if(thisPriorityQ.size() == 0){
+                System.out.println("Graph is not connected!");
+                return;
+            }
+
+            // Remove min element
+            Edge toIns = thisPriorityQ.removeElement();
+            int sourceVertex = toIns.sourceVertex;
+            currentVertex = toIns.destinationV;
+
+            // Display Edge
+            System.out.print(listVertices[sourceVertex].labelV);
+            System.out.print(listVertices[currentVertex].labelV);
+            System.out.print(" ");
+        }
+
+        // Reset flags
+        for(int i=0; i<nVertices; i++){
+            listVertices[i].isInTree = false;
+        }
+    }
+
+    public void insertIntoPriorityQ(int nVertex, int nDistance){
+        // Find if another edge has same destination
+        int queueInd = thisPriorityQ.findElement(nVertex);
+
+        if(queueInd != -1){
+            Edge oldEdge = thisPriorityQ.peekN(queueInd);
+            int oldDist = oldEdge.distance;
+            // Only insert if it has a smaller distance than oldEdge
+            if(oldDist > nDistance){
+                thisPriorityQ.removeN(queueInd);
+                Edge toInsert = new Edge(currentVertex, nVertex, nDistance);
+                thisPriorityQ.insertElement(toInsert);
+            }
+        }
+        else{
+            Edge toInsert = new Edge(currentVertex, nVertex, nDistance);
+            thisPriorityQ.insertElement(toInsert);
+        }
+    }
+
     // Topological sort (requires directed graph with no cycles)
     public void topologicalSort(){
         int originalnVertices = nVertices;
@@ -245,7 +316,7 @@ public class Graph {
 
     public int getAdjacentUnvisited(int vSearch){
         for(int i=0; i < nVertices; i++){
-            if(adjMatrix[vSearch][i] == 1 && !listVertices[i].isVisited){
+            if(adjMatrix[vSearch][i] != 0 && !listVertices[i].isVisited){
                 return i;
             }
         }

@@ -7,37 +7,27 @@ package DataStructures;
 public class DStester {
     public static void main(String args[]){
         Graph thisG = new Graph();
+
         thisG.insertVertex('A');
         thisG.insertVertex('B');
         thisG.insertVertex('C');
         thisG.insertVertex('D');
         thisG.insertVertex('E');
         thisG.insertVertex('F');
-        thisG.insertVertex('G');
-        thisG.insertVertex('H');
-        
-        thisG.addEdgeDirected(0, 3);
-        thisG.addEdgeDirected(0, 4);
-        thisG.addEdgeDirected(1, 4);
-        thisG.addEdgeDirected(2, 5);
-        thisG.addEdgeDirected(3, 6);
-        thisG.addEdgeDirected(4, 6);
-        thisG.addEdgeDirected(5, 7);
-        thisG.addEdgeDirected(6, 7);
 
-        System.out.print("DFS Visits: ");
-        thisG.depthFirstSearch(0);
+        thisG.addEdge(0, 1, 6);
+        thisG.addEdge(0, 3, 4);
+        thisG.addEdge(1, 2, 10);
+        thisG.addEdge(1, 3, 7);
+        thisG.addEdge(1, 4, 7);
+        thisG.addEdge(2, 3, 8);
+        thisG.addEdge(2, 4, 5);
+        thisG.addEdge(2, 5, 6);
+        thisG.addEdge(3, 4, 12);
+        thisG.addEdge(4, 5, 7);
+
+        System.out.print("Minimum spanning tree: ");
+        thisG.minimumSpanningTreeW(0);
         System.out.println();
-
-        System.out.print("BFS Visits: ");
-        thisG.breadthFirstSearch(0);
-        System.out.println();
-
-        System.out.print("Min Spanning Tree: ");
-        thisG.minimumSpanningTree(0);
-        System.out.println();
-
-        thisG.printMatrix(thisG.warshallAlgorithm());
-        thisG.topologicalSort();
     }
 }

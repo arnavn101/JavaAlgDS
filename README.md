@@ -243,7 +243,7 @@ Uses a stack to traverse through a graph, remembering previous vertices in a pat
 
 ```
 1) It first visits the given vertex, pushes it onto a stack and then travels to an adjacent vertex
-    - The process is repeated for all adjacent vertices until it finds a "dead-end" (no adj vertices)
+    - Repeat process for all adjacent vertices until it finds a "dead-end" (no adj vertices)
 2) Then, it pops the recent vertex from the stack and visits the previous vertex
     - It traverses through other adjacent vertices that were not visited before and pops at deadend
 3) The algorithm ends when stack becomes empty
@@ -268,6 +268,11 @@ Ensures a minimum number of edges that connect vertices in a graph
     i) E = V - 1
 2) Records the edges traveled in a depth first search 
     i) The path of DFS algorithm through a graph is a minimum spanning tree
+3) Different implementation for weighted graphs
+    i) First, find all edges from current vertex and insert them into a priority queue
+    ii) Pick the edge with the lowest weight and add it as the destination vertex
+    iii) Switch the current vertex to the destination vertex that was added 
+    iv) The priority queue should contain only one edge with a given destination vertex
 ```
 
 #### Topological sorting
