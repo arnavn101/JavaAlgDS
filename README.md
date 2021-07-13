@@ -298,6 +298,20 @@ Used for determining if a vertex is reachable from another vertex (Transitive Cl
 2) Iterates through each row and column, noting down possible paths
 ```
 
+#### Dijkstra’s Algorithm (Shortest Path Problem)
+
+Based on adjacency matrix representation and determines the shortest path from the current
+vertex to all the other vertices.
+
+```
+1) An array tracks min distance from starting vertex to other vertices
+    - Also store the parent path of each destination vertex
+2) First, visits the starting vertex and notes down distance to adjacent vertices
+    - Distance to unreachable nodes are marked as "inf"
+3) Then, select the shortest path vertex and repeat the process above
+    - Each time, mark the selected vertices as 'used'
+```
+
 ## License
 
 MIT License Copyright (c) 2021, Arnav Nidumolu

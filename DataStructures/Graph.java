@@ -1,7 +1,5 @@
 package DataStructures;
 
-import java.util.NoSuchElementException;
-
 /*
     Simple Graph
 */
@@ -9,6 +7,7 @@ import java.util.NoSuchElementException;
 public class Graph {
     private final int MAX_VERTS = 20; // Maximum amount of vertices
     private Vertex[] listVertices;
+    private final int INFINITY = 1000000;
     private int[][] adjMatrix;
     private int nVertices;
     private Stack thisStack; // for DFS
@@ -17,15 +16,28 @@ public class Graph {
     private int numberTree; // Number of vertices in tree
     private char topoSortedArray[]; // for topological sorting
     private int currentVertex;
+    
+    // For shortest path 
+    private DistanceParent shortestPaths[];
+    private int distStartToCurr; // distance to currentVertex
 
     public Graph(){
         listVertices = new Vertex[MAX_VERTS];
         adjMatrix = new int[MAX_VERTS][MAX_VERTS];
         nVertices = 0;
+        numberTree = 0;
         thisStack = new Stack(MAX_VERTS);
         thisQueue = new Queue(MAX_VERTS);
         topoSortedArray = new char[MAX_VERTS];
         thisPriorityQ = new PriorityQueueV(MAX_VERTS);
+
+        for(int i=0; i < MAX_VERTS; i++){
+            for(int j=0; j < MAX_VERTS; j++){
+                adjMatrix[i][j] = INFINITY;
+            }
+        }
+
+        shortestPaths = new DistanceParent[MAX_VERTS];
     }
 
     public void insertVertex(char vLabel){
@@ -36,6 +48,11 @@ public class Graph {
         adjMatrix[startE][endE] = weightE;
         adjMatrix[endE][startE] = weightE;
     }
+
+    public void addEdgeD(int startE, int endE, int weightE){
+        adjMatrix[startE][endE] = weightE;
+    }
+
 
     public void addEdgeDirected(int startE, int endE){
         adjMatrix[startE][endE] = 1;
@@ -59,11 +76,11 @@ public class Graph {
             for(int col=0; col<nVertices; col++){
 
                 // Examine cells in 'row' (there is path from col to row)
-                if(copyAdjMatrix[row][col] != 0){
+                if(copyAdjMatrix[row][col] != INFINITY){
 
                     // Examine cells in 'col' (there is path from rT to col)
                     for(int rT=0; rT<nVertices; rT++){
-                        if(copyAdjMatrix[col][rT] != 0){
+                        if(copyAdjMatrix[col][rT] != INFINITY){
                             copyAdjMatrix[row][rT] = 1; // there must be a path from rT to row
                         }
                     }
@@ -73,6 +90,41 @@ public class Graph {
 
         return copyAdjMatrix;
     }
+
+        // Floyd's Algorithm (Return a Table specifying distance between eahc possbile paths)
+        public int[][] floydAlgorithm(){
+            int[][] copyAdjMatrix = new int[nVertices][nVertices];
+            for(int i = 0; i < nVertices; i++){
+                for(int j = 0; j < nVertices; j++){
+                    copyAdjMatrix[i][j] = adjMatrix[i][j];
+                }
+            }
+    
+            // 3 Nested Loops implementation (Transitive Closure)
+            for(int row=0; row<nVertices; row++){
+                for(int col=0; col<nVertices; col++){
+    
+                    // Examine cells in 'row' (there is path from col to row)
+                    if(copyAdjMatrix[row][col] != INFINITY){
+    
+                        // Examine cells in 'col' (there is path from rT to col)
+                        for(int rT=0; rT<nVertices; rT++){
+                            if(copyAdjMatrix[col][rT] != INFINITY){
+                                int foundDistance = copyAdjMatrix[row][col] + copyAdjMatrix[col][rT];
+
+                                if(foundDistance < copyAdjMatrix[row][rT]){
+                                    // there must be a path from rT to row (replace distance if smaller)
+                                    copyAdjMatrix[row][rT] = foundDistance; 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    
+            return copyAdjMatrix;
+        }
+    
 
     public void printMatrix(int matrixP[][]){
         System.out.println("Following matrix is transitive closure"+
@@ -185,7 +237,7 @@ public class Graph {
                     continue;
                 }
                 int thisDistance = adjMatrix[currentVertex][i];
-                if(thisDistance == 0){
+                if(thisDistance == INFINITY){
                     continue;
                 }
                 insertIntoPriorityQ(i, thisDistance);
@@ -208,9 +260,7 @@ public class Graph {
         }
 
         // Reset flags
-        for(int i=0; i<nVertices; i++){
-            listVertices[i].isInTree = false;
-        }
+        resetVisitedFlags();
     }
 
     public void insertIntoPriorityQ(int nVertex, int nDistance){
@@ -257,6 +307,91 @@ public class Graph {
         System.out.println();
     }
 
+    public void DijkstraShortestPath(int startVertex){
+        int startTree = startVertex;
+        listVertices[startVertex].isInTree = true;
+        numberTree = 1;
+
+        // Transfer row of distance from matrix to a new array
+        for(int i=0; i < nVertices; i++){
+            int firstDist = adjMatrix[startTree][i];
+            shortestPaths[i] = new DistanceParent(startTree, firstDist);
+        }
+
+        // Until all vertices are in the tree
+        while(numberTree < nVertices){
+            int minIndex = getMinVertex(); // find vertex closest to currentVertex 
+            int minDistance = shortestPaths[minIndex].distance;
+
+            if(minDistance == INFINITY){
+                System.out.println("Unreachable vertex");
+                break;
+            }
+            else{
+                currentVertex = minIndex;
+                distStartToCurr = shortestPaths[currentVertex].distance;
+            }
+
+            listVertices[currentVertex].isInTree = true;
+            numberTree++;
+            adjustPathArray();
+        }
+
+        displayPaths();
+        resetVisitedFlags();
+    }
+
+    public void displayPaths(){
+        for(int i=0; i < nVertices; i++){
+            System.out.print(listVertices[i].labelV + "=");
+            if(shortestPaths[i].distance == INFINITY){
+                System.out.print("inf");
+            }
+            else{
+                System.out.print(shortestPaths[i].distance);
+            }
+            char parent = listVertices[shortestPaths[i].parentVertex].labelV;
+            System.out.print("(" + parent + ") ");
+        }
+        System.out.println("");
+    }
+
+    public void adjustPathArray(){
+        int currentCol = 1;
+        while(currentCol < nVertices){
+            if(listVertices[currentCol].isInTree){
+                currentCol++;
+                continue;
+            }
+            // Edge from current Vertex to currentCol
+            int currentToCol = adjMatrix[currentVertex][currentCol]; // INF if no edge
+            int startToCol = distStartToCurr + currentToCol;
+            int thisPathDistance = shortestPaths[currentCol].distance;
+
+            if(startToCol < thisPathDistance){
+                shortestPaths[currentCol].parentVertex = currentVertex;
+                shortestPaths[currentCol].distance = startToCol;
+            }
+            currentCol++;
+        }
+    }
+
+
+    // Return vertex closest to currentVertex
+    public int getMinVertex(){
+        int minDistance = INFINITY;
+        int minIndex = 0;
+
+        for(int i=0; i < nVertices; i++){
+            if(!listVertices[i].isInTree && shortestPaths[i].distance < minDistance){
+                minDistance = shortestPaths[i].distance;
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
     // Return Vertex with no Successors (Directed Graph)
     public int getNoSuccessors(){
         boolean hasEdge;
@@ -264,7 +399,7 @@ public class Graph {
             hasEdge = false;
             
             for(int j=0; j < nVertices; j++){
-                if(adjMatrix[i][j] != 0){
+                if(adjMatrix[i][j] != INFINITY){
                     hasEdge = true;
                     break;
                 }
@@ -311,12 +446,14 @@ public class Graph {
     public void resetVisitedFlags(){
         for(int i=0; i < nVertices; i++){
             listVertices[i].isVisited = false;
+            listVertices[i].isInTree = false;
         }
+        numberTree = 0;
     }
 
     public int getAdjacentUnvisited(int vSearch){
         for(int i=0; i < nVertices; i++){
-            if(adjMatrix[vSearch][i] != 0 && !listVertices[i].isVisited){
+            if(adjMatrix[vSearch][i] != INFINITY && !listVertices[i].isVisited){
                 return i;
             }
         }
